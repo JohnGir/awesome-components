@@ -7,8 +7,21 @@ import { SharedModule } from '../shared/shared.module';
 import { ComplexFormService } from '../social-media/services/complex-form.service';
 
 @NgModule({
-  declarations: [ComplexFormComponent],
-  imports: [CommonModule, ComplexFormRoutingModule, SharedModule],
-  providers: [ComplexFormService],
+  declarations: [
+    //
+    ComplexFormComponent,
+    //
+  ],
+  imports: [
+    CommonModule,
+    ComplexFormRoutingModule,
+    SharedModule,
+    //
+  ],
+  providers: [
+    //
+    ComplexFormService,
+    //
+  ],
 })
 export class ComplexFormModule {}
