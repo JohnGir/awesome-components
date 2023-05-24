@@ -9,6 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
 import { ComplexFormService } from 'src/app/social-media/services/complex-form.service';
+import { confirmEqualValidator } from '../../validators/confirm-equal.validator';
 
 @Component({
   selector: 'app-complex-form',
@@ -31,6 +32,9 @@ export class ComplexFormComponent implements OnInit {
 
   showEmailCtrl$: Observable<boolean>;
   showPhoneCtrl$: Observable<boolean>;
+
+  showEmailError$: Observable<boolean>;
+  showPasswordError$: Observable<boolean>;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,21 +65,33 @@ export class ComplexFormComponent implements OnInit {
     this.contactPreferenceCtrl = this.formBuilder.control('email');
     this.emailCtrl = this.formBuilder.control('');
     this.confirmEmailCtrl = this.formBuilder.control('');
-    this.emailForm = this.formBuilder.group({
-      email: this.emailCtrl,
-      confirm: this.confirmEmailCtrl,
-    });
+    this.emailForm = this.formBuilder.group(
+      {
+        email: this.emailCtrl,
+        confirm: this.confirmEmailCtrl,
+      },
+      {
+        validators: [confirmEqualValidator('email', 'confirm')],
+        updateOn: 'blur',
+      }
+    );
     this.phoneCtrl = this.formBuilder.control('');
     this.passwordCtrl = this.formBuilder.control('', Validators.required);
     this.confirmPasswordCtrl = this.formBuilder.control(
       '',
       Validators.required
     );
-    this.loginInfoForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: this.passwordCtrl,
-      confirmPassword: this.confirmPasswordCtrl,
-    });
+    this.loginInfoForm = this.formBuilder.group(
+      {
+        username: ['', Validators.required],
+        password: this.passwordCtrl,
+        confirmPassword: this.confirmPasswordCtrl,
+      },
+      {
+        validators: [confirmEqualValidator('password', 'confirmPassword')],
+        updateOn: 'blur',
+      }
+    );
   }
 
   private initFormObservables() {
@@ -88,6 +104,23 @@ export class ComplexFormComponent implements OnInit {
       startWith(this.contactPreferenceCtrl.value),
       map((preference) => preference === 'phone'),
       tap((showPhoneCtrl) => this.setPhoneValidators(showPhoneCtrl))
+    );
+    this.showEmailError$ = this.emailForm.statusChanges.pipe(
+      map(
+        (status) =>
+          status === 'INVALID' &&
+          this.emailCtrl.value &&
+          this.confirmEmailCtrl.value
+      )
+    );
+    this.showPasswordError$ = this.loginInfoForm.statusChanges.pipe(
+      map(
+        (status) =>
+          status === 'INVALID' &&
+          this.passwordCtrl.value &&
+          this.confirmPasswordCtrl.value &&
+          this.loginInfoForm.hasError('confirmEqual')
+      )
     );
   }
 
