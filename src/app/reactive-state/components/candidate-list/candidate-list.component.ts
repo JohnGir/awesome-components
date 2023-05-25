@@ -5,7 +5,12 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
+import { CandidatesService } from '../../services/candidates.service';
+import { Candidate } from '../../models/candidate.model';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { CandidateSearchType } from '../../enums/candidate-search-type.enum';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-candidate-list',
@@ -17,14 +22,60 @@ export class CandidateListComponent implements OnInit {
   //
 
   loading$!: Observable<boolean>;
+  candidates$!: Observable<Candidate[]>;
 
-  @Input() obj: { firstName: string; lastName: string };
-  candidatesService: any;
+  searchCtrl!: FormControl;
+  searchTypeCtrl!: FormControl;
+  searchTypeOptions!: {
+    value: CandidateSearchType;
+    label: string;
+  }[];
+
   //
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private candidatesService: CandidatesService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
-    //this.cdr.markForCheck();
+    this.initForm();
+    this.initObservables();
+    this.candidatesService.getCandidatesFromServer();
+  }
+
+  private initForm() {
+    this.searchCtrl = this.formBuilder.control('');
+    this.searchTypeCtrl = this.formBuilder.control(
+      CandidateSearchType.LASTNAME
+    );
+    this.searchTypeOptions = [
+      { value: CandidateSearchType.LASTNAME, label: 'Nom' },
+      { value: CandidateSearchType.FIRSTNAME, label: 'Prénom' },
+      { value: CandidateSearchType.COMPANY, label: 'Entreprise' },
+    ];
+  }
+
+  private initObservables() {
     this.loading$ = this.candidatesService.loading$;
+    const search$ = this.searchCtrl.valueChanges.pipe(
+      startWith(this.searchCtrl.value),
+      map((value) => value.toLowerCase())
+    );
+    const searchType$: Observable<CandidateSearchType> =
+      this.searchTypeCtrl.valueChanges.pipe(
+        startWith(this.searchTypeCtrl.value)
+      );
+    this.candidates$ = combineLatest([
+      search$,
+      searchType$,
+      this.candidatesService.candidates$,
+    ]).pipe(
+      map(([search, searchType, candidates]) =>
+        candidates.filter((candidate) =>
+          candidate[searchType].toLowerCase().includes(search as string)
+        )
+      )
+    );
   }
 }
