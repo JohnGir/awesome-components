@@ -53,6 +53,7 @@ export class CandidatesService {
     );
   }
 
+  //l'approche pessimmiste
   refuseCandidate(id: number): void {
     this.setLoadingStatus(true);
     this.http
@@ -72,6 +73,7 @@ export class CandidatesService {
       .subscribe();
   }
 
+  //l'approche optimiste
   hireCandidate(id: number): void {
     this.candidates$
       .pipe(
