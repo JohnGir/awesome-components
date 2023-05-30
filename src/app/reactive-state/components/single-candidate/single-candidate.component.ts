@@ -33,7 +33,7 @@ export class SingleCandidateComponent implements OnInit {
       )
     );
   }
-
+  // Boutton embauche
   onHire() {
     this.candidate$
       .pipe(
@@ -45,7 +45,7 @@ export class SingleCandidateComponent implements OnInit {
       )
       .subscribe();
   }
-
+  // Boutton refus
   onRefuse() {
     this.candidate$
       .pipe(
@@ -57,7 +57,7 @@ export class SingleCandidateComponent implements OnInit {
       )
       .subscribe();
   }
-
+  // Boutton retour
   onGoBack() {
     this.router.navigateByUrl('/reactive-state/candidates');
   }
