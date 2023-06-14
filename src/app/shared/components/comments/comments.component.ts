@@ -11,7 +11,7 @@ import {
   useAnimation,
 } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { Comment } from 'src/app/core/models/comment.model';
 import { flashAnimation } from '../../animations/flash.animation';
 import { slideFadeAnimation } from '../../animations/slide-and-fade';
@@ -96,10 +96,10 @@ export class CommentsComponent implements OnInit {
   @Input() comments: Comment[];
   @Output() newComment = new EventEmitter<string>();
 
-  commentCtrl: FormControl;
+  commentCtrl: UntypedFormControl;
   animationStates: { [key: number]: 'default' | 'active' } = {};
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: UntypedFormBuilder) {}
 
   ngOnInit(): void {
     this.commentCtrl = this.formBuilder.control('', [

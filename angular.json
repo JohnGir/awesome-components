@@ -153,7 +153,6 @@
       }
     }
   },
-  "defaultProject": "awesome-components",
   "cli": {
     "analytics": "f8576c6b-4540-44f4-8499-59fc1a803c2f"
   }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -19,16 +19,16 @@ import { confirmEqualValidator } from '../../validators/confirm-equal.validator'
 export class ComplexFormComponent implements OnInit {
   //
   loading = false;
-  mainForm: FormGroup;
-  personalInfoForm: FormGroup;
-  contactPreferenceCtrl: FormControl;
-  emailForm: FormGroup;
-  emailCtrl: FormControl;
-  confirmEmailCtrl: FormControl;
-  phoneCtrl: FormControl;
-  passwordCtrl: FormControl;
-  confirmPasswordCtrl: FormControl;
-  loginInfoForm: FormGroup;
+  mainForm: UntypedFormGroup;
+  personalInfoForm: UntypedFormGroup;
+  contactPreferenceCtrl: UntypedFormControl;
+  emailForm: UntypedFormGroup;
+  emailCtrl: UntypedFormControl;
+  confirmEmailCtrl: UntypedFormControl;
+  phoneCtrl: UntypedFormControl;
+  passwordCtrl: UntypedFormControl;
+  confirmPasswordCtrl: UntypedFormControl;
+  loginInfoForm: UntypedFormGroup;
 
   showEmailCtrl$: Observable<boolean>;
   showPhoneCtrl$: Observable<boolean>;
@@ -37,7 +37,7 @@ export class ComplexFormComponent implements OnInit {
   showPasswordError$: Observable<boolean>;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private complexFormService: ComplexFormService
   ) {}
 

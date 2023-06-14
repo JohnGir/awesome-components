@@ -8,7 +8,7 @@ import {
 import { Observable, combineLatest } from 'rxjs';
 import { CandidatesService } from '../../services/candidates.service';
 import { Candidate } from '../../models/candidate.model';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { CandidateSearchType } from '../../enums/candidate-search-type.enum';
 import { map, startWith } from 'rxjs/operators';
 
@@ -24,8 +24,8 @@ export class CandidateListComponent implements OnInit {
   loading$!: Observable<boolean>;
   candidates$!: Observable<Candidate[]>;
 
-  searchCtrl!: FormControl;
-  searchTypeCtrl!: FormControl;
+  searchCtrl!: UntypedFormControl;
+  searchTypeCtrl!: UntypedFormControl;
   searchTypeOptions!: {
     value: CandidateSearchType;
     label: string;
@@ -35,7 +35,7 @@ export class CandidateListComponent implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
     private candidatesService: CandidatesService,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {}
 
   ngOnInit(): void {
